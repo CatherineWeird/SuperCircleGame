@@ -398,3 +398,20 @@ function keyPressed() {
     setup();
   }
 }
+
+function touchEnded(){
+  
+  if (startScreen) {
+    startScreen = false;
+    gameScreen = true;
+  }
+
+  if (endScreen) {
+    endScreen = false;
+    startScreen = true;
+    setup();
+  }
+  
+}
+
+
