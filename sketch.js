@@ -1,3 +1,5 @@
+var browser;
+
 var startScreen = true;
 var gameScreen = false;
 var endScreen = false;
@@ -9,6 +11,7 @@ var centreCirc;
 var score;
 var shootingCircles;
 var circleCount;
+var ballSpeed;
 
 var goodSound;
 var badSound;
@@ -25,9 +28,14 @@ function preload() {
 }
 
 function setup() {
+  
+  //Get the Browser in use
+  browser = bowser.name;
+
+  console.log(browser);
 
   //Create environment
-  createCanvas(800, 800);
+  createCanvas(windowWidth, windowHeight);
   background(255);
   fill(0);
   noStroke();
@@ -35,8 +43,17 @@ function setup() {
   offset = 0;
   circleCount = 10;
   shootingCircles = [];
+  
   score = 0;
-
+  //set the initial ball Speed
+  ballSpeed = 5;
+  //change  ball speed depending on Browser detected
+  if(browser.name ==="Chrome"){
+    ballSpeed = 5;
+  }
+  else if(browser.name ==="Firefox"){
+    ballSpeed = 7;
+  }
 
   //Create the shooting circles and add them to array
   for (i = 0; i < circleCount; i++) {
@@ -72,7 +89,7 @@ function setup() {
     }
 
     //Add to array
-    shootingCircles.push(new ShootCircle(width, height, 20, 5, circleColour, circleDirection));
+    shootingCircles.push(new ShootCircle(width, height, 20, ballSpeed, circleColour, circleDirection));
 
   }
 
@@ -81,11 +98,16 @@ function setup() {
 
 }
 
+function windowResized(){
+  resizeCanvas(windoWidth, windowHeight);
+}
+
 function draw() {
   background(255);
   fill(0);
   if (startScreen) {
     textSize(32);
+    text(browser,100,100);
     text("Welcome to super circle colour match", 100, 200);
     text("Match the flying circles to the same colour", 100, 250);
     text("press any key to start", 100, 300);
@@ -321,6 +343,7 @@ function ShootCircle(x, y, size, speed, colour, direction) {
   this.y = y;
   this.size = size;
   this.speed = speed;
+  console.log(this.speed);
   this.textColour = colour
   this.colour = colour;
   this.direction = direction;
