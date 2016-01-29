@@ -29,6 +29,9 @@ function preload() {
 
 function setup() {
   
+  goodSound.setVolume(0.0);
+  badSound.setVolume(0.0);
+  
   //Get the Browser in use
   browser = bowser.name;
 
@@ -39,6 +42,7 @@ function setup() {
   background(255);
   fill(0);
   noStroke();
+  
   //initialize game variables
   offset = 0;
   circleCount = 10;
@@ -46,7 +50,7 @@ function setup() {
   
   score = 0;
   //set the initial ball Speed
-  ballSpeed = 5;
+  ballSpeed = 1;
   //change  ball speed depending on Browser detected
   if(browser.name ==="Chrome"){
     ballSpeed = 5;
@@ -73,7 +77,7 @@ function setup() {
       circleColour = "yellow";
 
     }
-    //Randomly select directio
+    //Randomly select direction
     var dir = floor(random(4));
     if (dir == 0) {
       circleDirection = "up";
@@ -99,7 +103,7 @@ function setup() {
 }
 
 function windowResized(){
-  resizeCanvas(windoWidth, windowHeight);
+  resizeCanvas(windowWidth, windowHeight);
 }
 
 function draw() {
@@ -117,15 +121,21 @@ function draw() {
     fill(255);
     textSize(32);
     text("Score: " + score, 100, 100);
+    text("cursorY "+ centreCirc.cursorY,100,200);
+     text("cursorX "+ centreCirc.cursorX,100,300);
 
     push();
     translate(width / 2, height / 2);
     if (offset < circleCount) {
+      
+      fill(50);
+      ellipse(0,0,200,200);
 
       centreCirc.update();
       shootingCircles[offset].update();
       shootingCircles[offset].render();
       centreCirc.collisionDetection();
+
 
     } else {
       gameScreen = false;
@@ -322,8 +332,20 @@ function CentreCircle(size, x, y, shootingCircles) {
 
 
   CentreCircle.prototype.update = function() {
+    
+    this.cursorY = mouseY - height / 2;
+    this.cursorX = mouseX - width / 2;
+    
 
-    this.a = atan2(mouseY - height / 2, mouseX - width / 2);
+    if(this.cursorX > 100  || this.cursorX < -100 || this.cursorY > 100  || this.cursorY < -100 ){
+      this.a = atan2(this.cursorY , this.cursorX );
+    }
+    
+    
+
+    
+
+    
 
     fill(255, 0, 0);
     arc(this.x, this.y, this.size, this.size, this.a, HALF_PI + this.a);
